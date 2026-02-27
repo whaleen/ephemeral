@@ -9,7 +9,9 @@ export class InfoModal {
   }
 
   private initializeModal() {
-    this.infoToggle.addEventListener('click', () => this.toggleModal());
+    this.infoToggle.addEventListener('click', () => this.toggle());
+    const closeBtn = document.getElementById('info-close');
+    closeBtn?.addEventListener('click', () => this.hideModal());
     this.infoOverlay.addEventListener('click', (e) => {
       if (e.target === this.infoOverlay) {
         this.hideModal();
@@ -17,7 +19,7 @@ export class InfoModal {
     });
   }
 
-  private toggleModal() {
+  public toggle() {
     this.infoOverlay.classList.toggle('hidden');
   }
 
@@ -31,5 +33,9 @@ export class InfoModal {
 
   public show() {
     this.infoOverlay.classList.remove('hidden');
+  }
+
+  public isHidden() {
+    return this.infoOverlay.classList.contains('hidden');
   }
 }

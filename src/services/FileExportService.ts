@@ -26,7 +26,7 @@ export class FileExportService {
       const selection = await open({
         directory: true,
         multiple: false,
-        defaultPath: this.exportDirectory || undefined
+        defaultPath: this.exportDirectory || undefined,
       });
 
       if (!selection || Array.isArray(selection)) {
@@ -47,13 +47,13 @@ export class FileExportService {
     try {
       const filePath = await invoke<string>('save_file', {
         filename,
-        content
+        content,
       });
-      
+
       this.lastExportPath = filePath;
       this.updateLastExportDisplay(filePath);
       this.startFileExistenceCheck();
-      
+
       return filePath;
     } catch (error) {
       console.error('Failed to save file:', error);
@@ -103,9 +103,9 @@ export class FileExportService {
       if (this.lastExportPath) {
         try {
           const exists = await invoke<boolean>('check_file_exists', {
-            path: this.lastExportPath
+            path: this.lastExportPath,
           });
-          
+
           if (!exists) {
             this.hideLastExportDisplay();
             if (this.fileCheckInterval) {
@@ -123,7 +123,7 @@ export class FileExportService {
   private hideLastExportDisplay() {
     const lastExportContainer = document.getElementById('last-export-container');
     const lastExportDot = document.getElementById('last-export-dot');
-    
+
     if (lastExportContainer && lastExportDot) {
       lastExportContainer.classList.add('hidden');
       lastExportDot.classList.add('hidden');

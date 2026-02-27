@@ -1,53 +1,50 @@
 export class ThemeManager {
   private html: HTMLElement;
   private themeToggle: HTMLElement | null;
+  private systemPrefersDark: MediaQueryList;
 
   constructor() {
     this.html = document.documentElement;
     this.themeToggle = document.getElementById('theme-toggle');
-    
+    this.systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
     if (!this.themeToggle) {
       console.error('Theme toggle button not found!');
       return;
     }
-    
+
     this.initializeTheme();
   }
 
   private initializeTheme() {
-    // Load saved theme or default to light
-    const savedTheme = localStorage.getItem('theme');
-    
-    if (savedTheme === 'dark') {
-      this.html.classList.add('dark');
-    } else {
-      // Default to light mode
-      this.html.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
+    // Clear historical override so app follows macOS theme by default.
+    localStorage.removeItem('theme');
+    this.applySystemTheme();
 
-    // Set up toggle listener
+    this.systemPrefersDark.addEventListener('change', () => {
+      this.applySystemTheme();
+    });
+
     this.themeToggle?.addEventListener('click', () => {
-      console.log('Theme toggle clicked');
       this.toggleTheme();
     });
   }
 
+  private applySystemTheme() {
+    if (this.systemPrefersDark.matches) {
+      this.html.classList.add('dark');
+    } else {
+      this.html.classList.remove('dark');
+    }
+  }
+
   private toggleTheme() {
-    console.log('Current theme:', this.html.classList.contains('dark') ? 'dark' : 'light');
-    console.log('HTML classList before:', this.html.className);
-    
+    // Manual toggle is session-only; next launch follows macOS again.
     if (this.html.classList.contains('dark')) {
       this.html.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      console.log('Switched to light mode');
     } else {
       this.html.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      console.log('Switched to dark mode');
     }
-    
-    console.log('HTML classList after:', this.html.className);
   }
 
   getCurrentTheme(): 'light' | 'dark' {
@@ -60,6 +57,5 @@ export class ThemeManager {
     } else {
       this.html.classList.remove('dark');
     }
-    localStorage.setItem('theme', theme);
   }
 }

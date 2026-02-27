@@ -71,27 +71,63 @@
 /* TipTap editor styles */
 .prose-editor {
   height: 100%;
-  padding: 24px;
-  font-size: 14px;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  padding: 64px min(80px, 12vw);
+  font-size: 16px;
+  line-height: 1.75;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   outline: none;
   white-space: pre-wrap;
   word-break: break-word;
-  color: rgb(17 24 39);
+  color: rgb(24 24 27);
+  caret-color: rgb(59 130 246);
 }
 
 .dark .prose-editor {
-  color: rgb(244 244 245);
+  color: rgb(228 228 231);
+  caret-color: rgb(96 165 250);
 }
 
+.prose-editor h1,
+.prose-editor h2,
+.prose-editor h3,
+.prose-editor h4,
+.prose-editor h5,
+.prose-editor h6 {
+  font-family: inherit;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+  color: rgb(9 9 11);
+  letter-spacing: -0.02em;
+}
+
+.dark .prose-editor h1,
+.dark .prose-editor h2,
+.dark .prose-editor h3,
+.dark .prose-editor h4,
+.dark .prose-editor h5,
+.dark .prose-editor h6 {
+  color: rgb(250 250 250);
+}
+
+.prose-editor h1 { font-size: 2.25rem; }
+.prose-editor h2 { font-size: 1.875rem; }
+.prose-editor h3 { font-size: 1.5rem; }
+.prose-editor h4 { font-size: 1.25rem; }
+.prose-editor h5 { font-size: 1.125rem; }
+.prose-editor h6 { font-size: 1rem; }
+
 .prose-editor p {
-  margin: 0;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
 }
 
 .prose-editor ul,
 .prose-editor ol {
-  padding-left: 1.25rem;
-  list-style-position: outside;
+  padding-left: 1.75rem;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
 }
 
 .prose-editor ul {
@@ -103,12 +139,14 @@
 }
 
 .prose-editor li {
-  margin: 0.15rem 0;
+  margin: 0.5rem 0;
 }
 
 .prose-editor a {
-  color: rgb(37 99 235);
+  color: rgb(59 130 246);
   text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
 }
 
 .dark .prose-editor a {
@@ -116,73 +154,81 @@
 }
 
 .prose-editor blockquote {
-  border-left: 2px solid rgb(148 163 184);
-  margin: 0.5rem 0;
-  padding-left: 0.75rem;
-  color: rgb(100 116 139);
+  border-left: 4px solid rgb(228 228 231);
+  margin: 2em 0;
+  padding-left: 1.5rem;
+  font-style: italic;
+  color: rgb(113 113 122);
 }
 
 .dark .prose-editor blockquote {
-  border-left-color: rgb(71 85 105);
-  color: rgb(148 163 184);
+  border-left-color: rgb(39 39 42);
+  color: rgb(161 161 170);
 }
 
 .prose-editor pre {
-  background: rgb(15 23 42);
-  color: rgb(226 232 240);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  background: rgb(244 244 245);
+  color: rgb(24 24 27);
+  padding: 1.5rem;
+  border-radius: 1rem;
   overflow: auto;
+  margin: 2em 0;
+  border: 1px solid rgb(228 228 231);
 }
 
 .dark .prose-editor pre {
   background: rgb(9 9 11);
-  color: rgb(228 228 231);
+  color: rgb(212 212 216);
+  border-color: rgb(24 24 27);
 }
 
 .prose-editor code {
-  background: rgb(226 232 240);
-  padding: 0.1rem 0.25rem;
-  border-radius: 0.25rem;
+  background: rgb(244 244 245);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.5rem;
+  font-size: 0.85em;
+  border: 1px solid rgb(228 228 231);
 }
 
 .dark .prose-editor code {
-  background: rgb(39 39 42);
+  background: rgb(24 24 27);
+  border-color: rgb(39 39 42);
 }
 
 .prose-editor hr {
   border: none;
-  border-top: 1px solid rgb(203 213 225);
-  margin: 1rem 0;
+  border-top: 2px solid rgb(244 244 245);
+  margin: 3em 0;
 }
 
 .dark .prose-editor hr {
-  border-top-color: rgb(63 63 70);
+  border-top-color: rgb(24 24 27);
 }
 
 .prose-editor table {
   border-collapse: collapse;
   width: 100%;
-  margin: 0.75rem 0;
+  margin: 2em 0;
 }
 
 .prose-editor th,
 .prose-editor td {
-  border: 1px solid rgb(203 213 225);
-  padding: 0.4rem 0.6rem;
+  border: 1px solid rgb(228 228 231);
+  padding: 1rem;
   text-align: left;
 }
 
 .dark .prose-editor th,
 .dark .prose-editor td {
-  border-color: rgb(63 63 70);
+  border-color: rgb(39 39 42);
 }
 
 .prose-editor .task-list-item {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 1rem;
   list-style: none;
+  margin: 0.75rem 0;
 }
 
 .prose-editor ul[data-type="taskList"] {
@@ -190,29 +236,55 @@
   padding-left: 0.25rem;
 }
 
-
 .prose-editor .task-list-item > label {
   display: inline-flex;
   align-items: center;
   margin: 0;
+  padding-top: 0.45rem;
+  flex-shrink: 0;
 }
 
 .prose-editor .task-list-item > span {
-  display: inline;
-  flex: 1 1 auto;
+  flex: 1;
   min-width: 0;
 }
 
 .prose-editor .task-list-item input[type="checkbox"] {
-  appearance: auto;
-  width: 12px;
-  height: 12px;
-  margin: 0;
-  accent-color: rgb(59 130 246);
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgb(212 212 216);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: transparent;
 }
 
 .dark .prose-editor .task-list-item input[type="checkbox"] {
-  accent-color: rgb(96 165 250);
+  border-color: rgb(63 63 70);
+}
+
+.prose-editor .task-list-item input[type="checkbox"]:checked {
+  background-color: rgb(59 130 246);
+  border-color: rgb(59 130 246);
+}
+
+.prose-editor .task-list-item input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+.dark .prose-editor .task-list-item input[type="checkbox"]:checked {
+  background-color: rgb(96 165 250);
+  border-color: rgb(96 165 250);
 }
 
 

@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="/src/styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ephemeral Text</title>
+    <title>Ephemeral</title>
     <script type="module" src="/src/main.ts" defer></script>
   </head>
 
   <body class="h-full m-0 overflow-hidden bg-zinc-100 dark:bg-zinc-950 flex flex-col">
     <!-- Header -->
-    <div class="w-full flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-zinc-950 border-b border-zinc-300 dark:border-zinc-800 drag-region">
+    <div class="w-full flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-zinc-950 border-b border-zinc-300 dark:border-zinc-800 drag-region" data-tauri-drag-region>
       <!-- Left: Window Controls -->
       <div class="title-bar-controls flex space-x-2 no-drag">
         <button id="close-btn" aria-label="Close" class="w-3 h-3 bg-red-500 rounded-full hover:bg-red-600 focus:outline-none"></button>
@@ -18,16 +18,13 @@
         <button id="maximize-btn" aria-label="Maximize" class="w-3 h-3 bg-green-500 rounded-full hover:bg-green-600 focus:outline-none"></button>
       </div>
 
-      <!-- Center: Filename -->
-      <div class="title-input-wrap flex justify-center flex-1">
-        <input type="text" id="filename-input" value="ephemeral-text" placeholder="ephemeral-text"
-              class="title-input no-drag bg-transparent text-md text-center text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 px-2 py-1 rounded">
-      </div>
+      <!-- Center: Spacer to allow dragging -->
+      <div class="flex-1 min-w-0 h-6 drag-region" data-tauri-drag-region></div>
 
       <!-- Right: Controls -->
       <div class="flex space-x-2 no-drag">
         <button id="info-toggle"
-          class="px-2 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-gray-800 dark:text-gray-200 hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors duration-200">
+          class="px-2 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-gray-800 dark:text-gray-200 hover:bg-zinc-200 dark:hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
@@ -36,7 +33,7 @@
           </svg>
         </button>
         <button id="theme-toggle"
-          class="px-2 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-gray-800 dark:text-gray-200 hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors duration-200">
+          class="px-2 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-gray-800 dark:text-gray-200 hover:bg-zinc-200 dark:hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-moon dark:hidden">
@@ -60,136 +57,138 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-grow relative">
+    <div class="flex-grow relative min-h-0 flex flex-col">
       <!-- Save Modal -->
-      <div id="save-modal" class="absolute inset-0 bg-zinc-100/90 dark:bg-zinc-950/90 flex items-center justify-center z-20 hidden">
-        <div class="bg-gray-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 max-w-sm w-full mx-4">
-          <h2 class="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">Save as...</h2>
-          <div class="flex flex-col space-y-3">
-            <button id="save-as-md" class="w-full px-4 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-gray-800 dark:text-gray-200 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-200">
-              Save as Markdown (.md)
+      <div id="save-modal" class="absolute inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-sm shadow-2xl overflow-hidden min-w-80">
+          <div class="px-4 pt-4 pb-3 border-b border-zinc-100 dark:border-zinc-800">
+            <label for="save-filename" class="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">File Name</label>
+            <input id="save-filename" type="text" class="w-full bg-transparent text-xs font-mono text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 rounded-sm px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-zinc-500/20" placeholder="ephemeral" />
+          </div>
+          <div class="flex">
+            <button id="save-as-md" class="flex-1 px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800 focus:bg-zinc-900 dark:focus:bg-zinc-100 focus:text-white dark:focus:text-zinc-900 focus:outline-none transition-colors border-r border-zinc-100 dark:border-zinc-800">
+              Markdown
             </button>
-            <button id="save-as-txt" class="w-full px-4 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-gray-800 dark:text-gray-200 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-200">
-              Save as Text (.txt)
+            <button id="save-as-txt" class="flex-1 px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800 focus:bg-zinc-900 dark:focus:bg-zinc-100 focus:text-white dark:focus:text-zinc-900 focus:outline-none transition-colors">
+              Text
             </button>
           </div>
         </div>
       </div>
 
-      <div id="prompt-modal" class="absolute inset-0 bg-zinc-100/90 dark:bg-zinc-950/90 flex items-center justify-center z-20 hidden">
-        <div class="bg-gray-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 max-w-sm w-full mx-4">
+      <div id="prompt-modal" class="absolute inset-0 bg-white/10 dark:bg-black/10 backdrop-blur-[2px] flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-sm p-1 w-80 shadow-2xl">
           <input id="prompt-input" type="text"
-            class="w-full bg-transparent text-sm text-gray-700 dark:text-gray-200 border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="" />
-          <div class="flex items-center justify-end mt-3">
-            <span id="prompt-hint" class="text-[10px] text-gray-500 dark:text-gray-500 tracking-wide">esc / enter (insert)</span>
-          </div>
+            class="w-full bg-transparent text-xs font-mono text-zinc-800 dark:text-zinc-100 px-3 py-2 focus:outline-none"
+            placeholder="URL..." />
         </div>
       </div>
       
-      <div id="info-overlay" class="absolute inset-0 bg-zinc-100/90 dark:bg-zinc-950/90 flex items-center justify-center z-20 hidden">
-        <div class="text-left text-gray-600 dark:text-gray-400 max-w-lg">
-          <h2 class="text-xl font-semibold mb-3">Ephemeral Text</h2>
-          <p class="text-xs mb-5">Write freely. Nothing is saved unless you export it. Grammar hints are inline and optional.</p>
-          <h3 class="text-lg font-semibold mb-3">Features</h3>
-          <ul class="text-xs space-y-1 mb-5 list-disc pl-4">
-            <li>Rich Markdown editing with live formatting</li>
-            <li>Inline grammar hints with click-to-apply fixes</li>
-            <li>Manual export to .md or .txt (no autosave)</li>
-            <li>Custom export directory selection</li>
-            <li>Light/dark theme toggle</li>
-          </ul>
-          <div class="text-xs mb-5">
-            <a href="https://github.com/whaleen/ephemeral-text" data-external
-              class="text-gray-700 dark:text-gray-300 underline underline-offset-4">GitHub Repo</a>
+      <div id="info-overlay" class="absolute inset-0 bg-white dark:bg-zinc-950 flex items-center justify-center z-40 hidden">
+        <div class="text-left text-zinc-600 dark:text-zinc-400 max-w-2xl w-full p-8 md:p-12 overflow-y-auto max-h-full">
+          <div class="flex items-center justify-between mb-12">
+            <h2 class="text-3xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100">EPHEMERAL</h2>
+            <button id="info-close" class="p-2 -mr-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-200 hover:rotate-90">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
           </div>
-          <h3 class="text-lg font-semibold mb-3">App Shortcuts</h3>
-          <div class="text-xs space-y-1 mb-4">
-            <p>ESC <span class="text-gray-500 dark:text-gray-500">Exit Fullscreen</span></p>
-            <p>⌘/Ctrl + S <span class="text-gray-500 dark:text-gray-500">Save File</span></p>
-            <p>⌘/Ctrl + W <span class="text-gray-500 dark:text-gray-500">Close Window</span></p>
-            <p>⌘/Ctrl + N <span class="text-gray-500 dark:text-gray-500">New Window</span></p>
-            <p>⌘/Ctrl + Shift + F <span class="text-gray-500 dark:text-gray-500">Toggle Fullscreen</span></p>
-            <p>⌘/Ctrl + Q <span class="text-gray-500 dark:text-gray-500">Quit App</span></p>
-          </div>
-          <h3 class="text-lg font-semibold mb-3">Editor Shortcuts</h3>
-          <div class="text-xs space-y-1 grid grid-cols-2 gap-x-4">
-            <div>
-              <p>⌘/Ctrl + B <span class="text-gray-500 dark:text-gray-500">Bold</span></p>
-              <p>⌘/Ctrl + I <span class="text-gray-500 dark:text-gray-500">Italic</span></p>
-              <p>⌘/Ctrl + 1-6 <span class="text-gray-500 dark:text-gray-500">Headings</span></p>
-              <p>⌘/Ctrl + K <span class="text-gray-500 dark:text-gray-500">Link</span></p>
-              <p>Enter <span class="text-gray-500 dark:text-gray-500">Edit Link (cursor in link)</span></p>
-              <p>⌘/Ctrl + Shift + C <span class="text-gray-500 dark:text-gray-500">Code Block</span></p>
-              <p>⌘/Ctrl + Shift + Q <span class="text-gray-500 dark:text-gray-500">Blockquote</span></p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div class="space-y-8">
+              <div>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mb-4">Philosophy</h3>
+                <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                  A transient space for raw thought. Zero persistence, zero friction. Your text exists only while this window lives. Export explicitly or lose it forever.
+                </p>
+              </div>
+              
+              <div>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mb-4">Application</h3>
+                <div class="space-y-4 text-sm">
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Save / Export</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘S</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Info Pane</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘I</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Fullscreen</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘⇧F</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Close/Quit</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘W / ⌘Q</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <p>⌘/Ctrl + Shift + S <span class="text-gray-500 dark:text-gray-500">Strikethrough</span></p>
-              <p>⌘/Ctrl + Shift + L <span class="text-gray-500 dark:text-gray-500">Bulleted List</span></p>
-              <p>⌘/Ctrl + Shift + O <span class="text-gray-500 dark:text-gray-500">Ordered List</span></p>
-              <p>⌘/Ctrl + Shift + T <span class="text-gray-500 dark:text-gray-500">Task List</span></p>
-              <p>⌘/Ctrl + Shift + H <span class="text-gray-500 dark:text-gray-500">Horizontal Rule</span></p>
-              <p>⌘/Ctrl + Shift + I <span class="text-gray-500 dark:text-gray-500">Image</span></p>
-              <p>⌘/Ctrl + Shift + X <span class="text-gray-500 dark:text-gray-500">Table</span></p>
+            
+            <div class="space-y-8">
+              <div>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mb-4">Markdown Editor</h3>
+                <div class="space-y-4 text-sm">
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Bold</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘B</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Link / Image</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘K / ⌘⇧I</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Lists</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘⇧L / ⌘⇧O / ⌘⇧T</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Table</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘⇧X</span>
+                  </div>
+                  <div class="flex justify-between items-baseline group border-b border-zinc-100 dark:border-zinc-900 pb-1.5">
+                    <span class="text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300 transition-colors">Headings</span>
+                    <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-900 dark:text-zinc-100">⌘1-6</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-8">
+                <a href="https://github.com/whaleen/ephemeral-text" data-external
+                  class="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-300 group">
+                  <span class="border-b-2 border-zinc-100 dark:border-zinc-800 group-hover:border-zinc-900 dark:group-hover:border-zinc-100 pb-0.5">Source on GitHub</span>
+                  <svg class="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
       <div id="editor"
-        class="w-full h-full relative"></div>
+        class="w-full h-full relative overflow-y-auto overflow-x-hidden flex-grow"></div>
     </div>
 
     <!-- Footer -->
-    <div class="footer-shell footer-mono w-full flex flex-wrap sm:flex-nowrap items-center justify-between px-4 py-2 bg-gray-50 dark:bg-zinc-950 border-t border-gray-300 dark:border-zinc-800">
+    <div class="footer-shell footer-mono w-full flex items-center justify-between px-4 py-1 bg-gray-50 dark:bg-zinc-950 border-t border-gray-300 dark:border-zinc-800">
       <!-- Left Section -->
-      <div class="footer-left flex flex-col w-full sm:w-auto mb-2 sm:mb-0">
-        <div id="last-export-container" class="footer-row flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer hidden">
-          <span id="last-export-dot" class="h-2 w-2 rounded-full bg-green-500 animate-pulse hidden"></span>
-          <span id="last-export"></span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="footer-icon lucide lucide-view">
-            <path d="M21 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2" />
-            <path d="M21 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2" />
-            <circle cx="12" cy="12" r="1" />
-            <path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0" />
-          </svg>
+      <div class="footer-left flex items-center space-x-3">
+        <div id="last-export-container" class="flex items-center space-x-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer hidden">
+          <span id="last-export-dot" class="h-1.5 w-1.5 rounded-full bg-green-500 hidden"></span>
+          <span id="last-export" class="uppercase tracking-widest"></span>
         </div>
       </div>
 
       <!-- Right Section -->
-      <div class="footer-right flex flex-col sm:flex-row items-center sm:space-x-4 w-full sm:w-auto">
-        <!-- Export Options -->
-        <div class="footer-row flex items-center justify-center sm:justify-start space-x-2 mb-2 sm:mb-0">
-          <button id="download-txt" class="flex items-center text-gray-800 dark:text-gray-400 hover:dark:text-gray-200 transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="footer-icon">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <span class="ml-1 text-xs">TXT</span>
-          </button>
-          <button id="download-markdown" class="flex items-center text-gray-800 dark:text-gray-400 hover:dark:text-gray-200 transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="footer-icon">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <span class="ml-1 text-xs">Markdown</span>
-          </button>
-        </div>
-
+      <div class="footer-right flex items-center space-x-4">
         <!-- Directory Export -->
-        <div class="footer-row flex items-center justify-center sm:justify-start space-x-2">
-          <button id="export-dir-btn" class="text-gray-800 dark:text-gray-400 hover:dark:text-gray-200 transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="footer-icon">
+        <div class="flex items-center space-x-2">
+          <button id="export-dir-btn" class="text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 4h4l2 2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V6a2 2 0 1 1 2-2z" />
             </svg>
           </button>
-          <span id="export-dir-display" class="text-xs text-gray-500 dark:text-gray-500"></span>
+          <span id="export-dir-display" class="text-zinc-400 dark:text-zinc-500 uppercase tracking-widest"></span>
         </div>
       </div>
     </div>

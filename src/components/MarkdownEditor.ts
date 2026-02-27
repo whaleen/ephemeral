@@ -18,6 +18,7 @@ import { Decoration, DecorationSet } from 'prosemirror-view';
 import { HarperCorrectionMenu, HarperSuggestion } from './HarperCorrectionMenu';
 import { PromptModal } from './PromptModal';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let harperInstance: any = null;
 
 async function initializeHarper() {
@@ -44,6 +45,7 @@ async function checkGrammar(text: string): Promise<HarperSuggestion[]> {
     const result = await harper.lint(text, { language: 'markdown' });
     if (!result || !Array.isArray(result)) return [];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return result.map((lint: any) => {
       const span = lint.span();
       const suggestions = lint.suggestions();
@@ -52,6 +54,7 @@ async function checkGrammar(text: string): Promise<HarperSuggestion[]> {
         start: span.start,
         end: span.end,
         message: lint.message(),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         replacements: suggestions.map((s: any) => s.get_replacement_text()),
       };
     });
@@ -91,6 +94,22 @@ export class MarkdownEditor {
   private setupEditor() {
     const harperExtension = this.createHarperExtension();
     const shortcuts = this.createShortcutExtension();
+    const NonInclusiveLink = Link.extend({
+      inclusive: false,
+    });
+    const InlineTaskItem = TaskItem.extend({
+      renderHTML({ node, HTMLAttributes }) {
+        return [
+          'li',
+          HTMLAttributes,
+          [
+            'label',
+            ['input', { type: 'checkbox', checked: node.attrs.checked ? 'checked' : null }],
+          ],
+          ['span', 0],
+        ];
+      },
+    });
 
     this.editor = new Editor({
       element: this.container,
@@ -102,11 +121,10 @@ export class MarkdownEditor {
           orderedList: false,
           listItem: false,
         }),
-        Link.configure({
+        NonInclusiveLink.configure({
           openOnClick: false,
           autolink: true,
           linkOnPaste: true,
-          inclusive: false,
         }),
         Image,
         BulletList.configure({
@@ -117,10 +135,7 @@ export class MarkdownEditor {
           keepMarks: true,
           keepAttributes: false,
         }),
-        ListItem.configure({
-          keepMarks: true,
-          keepAttributes: false,
-        }),
+        ListItem,
         Table.configure({
           resizable: false,
         }),
@@ -128,19 +143,8 @@ export class MarkdownEditor {
         TableHeader,
         TableCell,
         TaskList,
-        TaskItem.configure({
+        InlineTaskItem.configure({
           nested: true,
-          HTMLAttributes: {
-            class: 'task-list-item',
-          },
-          renderHTML({ node, HTMLAttributes }) {
-            return [
-              'li',
-              HTMLAttributes,
-              ['label', ['input', { type: 'checkbox', checked: node.attrs.checked ? 'checked' : null }]],
-              ['span', 0],
-            ];
-          },
         }),
         Placeholder.configure({
           placeholder: "I'm writing it down to remember it now...",
@@ -159,6 +163,9 @@ export class MarkdownEditor {
         },
       },
     });
+
+    // Explicitly initialize Harper after editor is ready
+    initializeHarper().catch(console.error);
 
     this.editor.on('selectionUpdate', () => {
       const { empty } = this.editor.state.selection;
@@ -188,16 +195,58 @@ export class MarkdownEditor {
           }
           return false;
         },
-        'Mod-b': () => this.editor.commands.toggleBold(),
-        'Mod-i': () => this.editor.commands.toggleItalic(),
-        'Mod-Shift-s': () => this.editor.commands.toggleStrike(),
-        'Mod-Shift-c': () => this.editor.commands.toggleCodeBlock(),
-        'Mod-Shift-q': () => this.editor.commands.toggleBlockquote(),
-        'Mod-Shift-l': () => this.editor.commands.toggleBulletList(),
-        'Mod-Shift-o': () => this.editor.commands.toggleOrderedList(),
-        'Mod-Shift-t': () => this.editor.commands.toggleTaskList(),
-        'Mod-Shift-h': () => this.editor.commands.setHorizontalRule(),
-        'Mod-Shift-x': () => this.editor.commands.insertTable({ rows: 3, cols: 3, withHeaderRow: true }),
+        'Mod-b': () => {
+          this.editor.commands.toggleBold();
+          return true;
+        },
+        'Mod-i': () => {
+          this.editor.commands.toggleItalic();
+          return true;
+        },
+        'Mod-Shift-s': () => {
+          this.editor.commands.toggleStrike();
+          return true;
+        },
+        'Mod-Shift-c': () => {
+          this.editor.commands.toggleCodeBlock();
+          return true;
+        },
+        'Mod-Shift-q': () => {
+          this.editor.commands.toggleBlockquote();
+          return true;
+        },
+        'Mod-Shift-l': () => {
+          this.editor.commands.toggleBulletList();
+          return true;
+        },
+        'Mod-Shift-o': () => {
+          this.editor.commands.toggleOrderedList();
+          return true;
+        },
+        'Mod-Shift-t': () => {
+          this.editor.commands.toggleTaskList();
+          return true;
+        },
+        'Mod-Shift-h': () => {
+          this.editor.commands.setHorizontalRule();
+          return true;
+        },
+        'Mod-Shift-x': () => {
+          this.editor.commands.insertTable({ rows: 3, cols: 3, withHeaderRow: true });
+          return true;
+        },
+        'Mod-z': () => {
+          this.editor.commands.undo();
+          return true;
+        },
+        'Mod-y': () => {
+          this.editor.commands.redo();
+          return true;
+        },
+        'Mod-Shift-z': () => {
+          this.editor.commands.redo();
+          return true;
+        },
         'Mod-k': () => {
           this.promptForLink();
           return true;
@@ -206,14 +255,36 @@ export class MarkdownEditor {
           this.promptForImage();
           return true;
         },
-        'Mod-1': () => this.editor.commands.toggleHeading({ level: 1 }),
-        'Mod-2': () => this.editor.commands.toggleHeading({ level: 2 }),
-        'Mod-3': () => this.editor.commands.toggleHeading({ level: 3 }),
-        'Mod-4': () => this.editor.commands.toggleHeading({ level: 4 }),
-        'Mod-5': () => this.editor.commands.toggleHeading({ level: 5 }),
-        'Mod-6': () => this.editor.commands.toggleHeading({ level: 6 }),
+        'Mod-1': () => {
+          this.editor.commands.toggleHeading({ level: 1 });
+          return true;
+        },
+        'Mod-2': () => {
+          this.editor.commands.toggleHeading({ level: 2 });
+          return true;
+        },
+        'Mod-3': () => {
+          this.editor.commands.toggleHeading({ level: 3 });
+          return true;
+        },
+        'Mod-4': () => {
+          this.editor.commands.toggleHeading({ level: 4 });
+          return true;
+        },
+        'Mod-5': () => {
+          this.editor.commands.toggleHeading({ level: 5 });
+          return true;
+        },
+        'Mod-6': () => {
+          this.editor.commands.toggleHeading({ level: 6 });
+          return true;
+        },
       }),
     });
+  }
+
+  public focus() {
+    this.editor.commands.focus();
   }
 
   private async promptForLink() {
@@ -290,6 +361,7 @@ export class MarkdownEditor {
     this.editor.chain().focus().setImage({ src }).run();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private buildTextIndex(doc: any) {
     let text = '';
     const map: number[] = [];
@@ -301,9 +373,11 @@ export class MarkdownEditor {
       text += value;
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     doc.descendants((node: any, pos: number) => {
       if (node.isTextblock) {
         const base = pos + 1;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         node.descendants((child: any, childPos: number) => {
           if (child.isText && child.text) {
             pushText(child.text, base + childPos);
@@ -334,6 +408,7 @@ export class MarkdownEditor {
         const menu = this.correctionMenu;
         let debounceTimer: number | null = null;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const runLint = async (view: any) => {
           const { text, map } = this.buildTextIndex(view.state.doc);
           if (!text.trim()) {
@@ -365,13 +440,15 @@ export class MarkdownEditor {
                   'data-replacements': JSON.stringify(suggestion.replacements),
                   title: suggestion.message,
                 },
-                { suggestion, from, to }
-              )
+                { suggestion, from, to },
+              ),
             );
           });
 
           const decorationSet = DecorationSet.create(view.state.doc, decorations);
-          view.dispatch(view.state.tr.setMeta(this.harperPluginKey, { decorations: decorationSet }));
+          view.dispatch(
+            view.state.tr.setMeta(this.harperPluginKey, { decorations: decorationSet }),
+          );
         };
 
         return [
@@ -393,8 +470,9 @@ export class MarkdownEditor {
               },
             },
             props: {
-              decorations: (state) => this.harperPluginKey.getState(state)?.decorations ?? DecorationSet.empty,
-              handleClick: (view, pos, event) => {
+              decorations: (state) =>
+                this.harperPluginKey.getState(state)?.decorations ?? DecorationSet.empty,
+              handleClick: (view, pos) => {
                 const pluginState = this.harperPluginKey.getState(view.state);
                 if (!pluginState) return false;
 
@@ -402,14 +480,22 @@ export class MarkdownEditor {
                 if (!matches.length) return false;
 
                 const match = matches[0];
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const suggestion = (match.spec as any).suggestion as HarperSuggestion | undefined;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const from = (match.spec as any).from as number | undefined;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const to = (match.spec as any).to as number | undefined;
 
                 if (!suggestion || from == null || to == null) return false;
 
                 const coords = view.coordsAtPos(from);
-                const rect = new DOMRect(coords.left, coords.top, coords.right - coords.left, coords.bottom - coords.top);
+                const rect = new DOMRect(
+                  coords.left,
+                  coords.top,
+                  coords.right - coords.left,
+                  coords.bottom - coords.top,
+                );
 
                 menu.show(suggestion, rect, (replacement) => {
                   this.editor.commands.command(({ tr }) => {
