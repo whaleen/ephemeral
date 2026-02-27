@@ -36,7 +36,9 @@ Legacy Electron snapshot:
 ## Keyboard Shortcuts
 
 - Save / Export: `Cmd/Ctrl + S`
-- Info Pane: `Cmd/Ctrl + I`
+- Info Pane: `Cmd/Ctrl + /`
+- Toggle Markdown Mode: `Cmd/Ctrl + M`
+- Set Export Folder: `Cmd/Ctrl + E`
 - Close/Quit: `Cmd/Ctrl + W` or `Cmd/Ctrl + Q`
 - Fullscreen: `Cmd/Ctrl + Shift + F`
 - Bold: `Cmd/Ctrl + B`

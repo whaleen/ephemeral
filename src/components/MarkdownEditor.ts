@@ -79,6 +79,8 @@ export class MarkdownEditor {
   private correctionMenu: HarperCorrectionMenu;
   private harperPluginKey = new PluginKey<HarperPluginState>('harper-grammar');
   private promptModal: PromptModal;
+  private sourceElement: HTMLTextAreaElement | null = null;
+  private isSourceMode = false;
 
   constructor(editorId: string) {
     this.container = document.getElementById(editorId) as HTMLElement;
@@ -89,6 +91,7 @@ export class MarkdownEditor {
     this.correctionMenu = new HarperCorrectionMenu();
     this.promptModal = new PromptModal();
     this.setupEditor();
+    this.enterSourceMode();
   }
 
   private setupEditor() {
@@ -284,7 +287,20 @@ export class MarkdownEditor {
   }
 
   public focus() {
+    if (this.isSourceMode) {
+      this.sourceElement?.focus();
+      return;
+    }
     this.editor.commands.focus();
+  }
+
+  public togglePreviewMode() {
+    if (this.isSourceMode) {
+      this.exitSourceMode();
+      return;
+    }
+
+    this.enterSourceMode();
   }
 
   private async promptForLink() {
@@ -540,11 +556,20 @@ export class MarkdownEditor {
   }
 
   getValue(): string {
+    if (this.isSourceMode && this.sourceElement) {
+      return this.sourceElement.value;
+    }
+
     const storage = this.editor.storage as { markdown?: MarkdownStorage };
     return storage.markdown?.getMarkdown?.() ?? this.editor.getText();
   }
 
   setValue(value: string) {
+    if (this.isSourceMode && this.sourceElement) {
+      this.sourceElement.value = value;
+      return;
+    }
+
     const storage = this.editor.storage as { markdown?: MarkdownStorage };
     if (storage.markdown?.setMarkdown) {
       storage.markdown.setMarkdown(value);
@@ -552,5 +577,126 @@ export class MarkdownEditor {
     }
 
     this.editor.commands.setContent(value);
+  }
+
+  private enterSourceMode() {
+    const markdown = this.getValue();
+    this.editor.setEditable(true);
+    this.container.classList.add('hidden');
+
+    if (!this.sourceElement) {
+      this.sourceElement = document.createElement('textarea');
+      this.sourceElement.className = 'markdown-source';
+      this.sourceElement.setAttribute('aria-label', 'Markdown source editor');
+      this.sourceElement.addEventListener('keydown', (event) => this.handleSourceKeydown(event));
+      this.container.parentElement?.appendChild(this.sourceElement);
+    }
+
+    this.sourceElement.value = markdown;
+    this.sourceElement.classList.remove('hidden');
+    this.sourceElement.focus();
+    this.isSourceMode = true;
+  }
+
+  private exitSourceMode() {
+    const sourceMarkdown = this.sourceElement?.value ?? '';
+    this.sourceElement?.classList.add('hidden');
+    this.container.classList.remove('hidden');
+    const storage = this.editor.storage as { markdown?: MarkdownStorage };
+    if (storage.markdown?.setMarkdown) {
+      storage.markdown.setMarkdown(sourceMarkdown);
+    } else {
+      this.editor.commands.setContent(sourceMarkdown);
+    }
+    this.editor.setEditable(true);
+    this.isSourceMode = false;
+    this.editor.commands.focus();
+  }
+
+  private handleSourceKeydown(event: KeyboardEvent) {
+    if (!this.sourceElement) return;
+
+    const isCmd = event.metaKey || event.ctrlKey;
+    const key = event.key.toLowerCase();
+
+    if (isCmd && !event.shiftKey && key === 'b') {
+      event.preventDefault();
+      this.wrapSelectionWith('**');
+      return;
+    }
+
+    if (isCmd && !event.shiftKey && key === 'i') {
+      event.preventDefault();
+      this.wrapSelectionWith('*');
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      const handled = this.handleSourceEnterKey();
+      if (handled) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  private wrapSelectionWith(marker: string) {
+    if (!this.sourceElement) return;
+
+    const el = this.sourceElement;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const value = el.value;
+    const selected = value.slice(start, end);
+    const wrapped = `${marker}${selected}${marker}`;
+
+    el.value = `${value.slice(0, start)}${wrapped}${value.slice(end)}`;
+    const nextStart = start + marker.length;
+    const nextEnd = nextStart + selected.length;
+    el.setSelectionRange(nextStart, nextEnd);
+  }
+
+  private handleSourceEnterKey(): boolean {
+    if (!this.sourceElement) return false;
+
+    const el = this.sourceElement;
+    if (el.selectionStart !== el.selectionEnd) return false;
+
+    const cursor = el.selectionStart;
+    const value = el.value;
+    const lineStart = value.lastIndexOf('\n', Math.max(0, cursor - 1)) + 1;
+    const lineEnd = value.indexOf('\n', cursor);
+    const end = lineEnd === -1 ? value.length : lineEnd;
+    const line = value.slice(lineStart, end);
+
+    const taskMatch = line.match(/^(\s*)[-*+]\s+\[(?: |x|X)\]\s+(.+)$/);
+    if (taskMatch) {
+      return this.insertAtCursor(`\n${taskMatch[1]}- [ ] `);
+    }
+
+    const unorderedMatch = line.match(/^(\s*)([-*+])\s+(.+)$/);
+    if (unorderedMatch) {
+      return this.insertAtCursor(`\n${unorderedMatch[1]}${unorderedMatch[2]} `);
+    }
+
+    const orderedMatch = line.match(/^(\s*)(\d+)\.\s+(.+)$/);
+    if (orderedMatch) {
+      const nextNumber = Number.parseInt(orderedMatch[2], 10) + 1;
+      return this.insertAtCursor(`\n${orderedMatch[1]}${nextNumber}. `);
+    }
+
+    return false;
+  }
+
+  private insertAtCursor(text: string): boolean {
+    if (!this.sourceElement) return false;
+
+    const el = this.sourceElement;
+    const cursor = el.selectionStart;
+    const value = el.value;
+
+    el.value = `${value.slice(0, cursor)}${text}${value.slice(cursor)}`;
+    const nextCursor = cursor + text.length;
+    el.setSelectionRange(nextCursor, nextCursor);
+    return true;
   }
 }

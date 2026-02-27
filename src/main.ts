@@ -36,10 +36,25 @@ class EphemeralTextApp {
         const isShift = event.shiftKey;
         const key = event.key.toLowerCase();
 
-        if (isCmd && !isShift && key === 'i') {
+        if (isCmd && (key === '/' || key === '?')) {
           event.preventDefault();
           event.stopPropagation();
           this.infoModal.toggle();
+          return;
+        }
+
+        if (isCmd && !isShift && key === 'm') {
+          event.preventDefault();
+          event.stopPropagation();
+          this.editor.togglePreviewMode();
+          return;
+        }
+
+        if (isCmd && !isShift && key === 'e') {
+          event.preventDefault();
+          this.fileExportService.selectExportDirectory().catch((error) => {
+            console.error('Failed to open export directory picker:', error);
+          });
           return;
         }
 
