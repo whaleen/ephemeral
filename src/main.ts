@@ -32,70 +32,70 @@ class EphemeralTextApp {
     window.addEventListener(
       'keydown',
       (event) => {
-      const isCmd = event.metaKey || event.ctrlKey;
-      const isShift = event.shiftKey;
-      const key = event.key.toLowerCase();
+        const isCmd = event.metaKey || event.ctrlKey;
+        const isShift = event.shiftKey;
+        const key = event.key.toLowerCase();
 
-      if (isCmd && !isShift && key === 'i') {
-        event.preventDefault();
-        event.stopPropagation();
-        this.infoModal.toggle();
-        return;
-      }
+        if (isCmd && !isShift && key === 'i') {
+          event.preventDefault();
+          event.stopPropagation();
+          this.infoModal.toggle();
+          return;
+        }
 
-      if (isCmd && !isShift && key === 'n') {
-        event.preventDefault();
-        invoke('create_window').catch((error) => {
-          console.error('Failed to create window:', error);
-        });
-        return;
-      }
+        if (isCmd && !isShift && key === 'n') {
+          event.preventDefault();
+          invoke('create_window').catch((error) => {
+            console.error('Failed to create window:', error);
+          });
+          return;
+        }
 
-      if (isCmd && !isShift && key === 'w') {
-        event.preventDefault();
-        invoke('quit_app').catch((error) => {
-          console.error('Failed to quit app:', error);
-        });
-        return;
-      }
+        if (isCmd && !isShift && key === 'w') {
+          event.preventDefault();
+          invoke('quit_app').catch((error) => {
+            console.error('Failed to quit app:', error);
+          });
+          return;
+        }
 
-      if (isCmd && !isShift && key === 'q') {
-        event.preventDefault();
-        invoke('quit_app').catch((error) => {
-          console.error('Failed to quit app:', error);
-        });
-        return;
-      }
+        if (isCmd && !isShift && key === 'q') {
+          event.preventDefault();
+          invoke('quit_app').catch((error) => {
+            console.error('Failed to quit app:', error);
+          });
+          return;
+        }
 
-      // Save shortcut (Cmd+S)
-      if (isCmd && !isShift && key === 's') {
-        event.preventDefault();
-        this.infoModal.hide();
-        this.showSaveModal();
-        return;
-      }
-
-      // Fullscreen toggle (Cmd+Shift+F)
-      if (isCmd && isShift && key === 'f') {
-        event.preventDefault();
-        this.toggleFullscreen();
-        return;
-      }
-
-      // Handle ESC key for overlays
-      if (event.key === 'Escape') {
-        const isInfoOpen = !this.infoModal.isHidden();
-        const isSaveOpen = !this.saveModal.isHidden();
-
-        if (isInfoOpen || isSaveOpen) {
+        // Save shortcut (Cmd+S)
+        if (isCmd && !isShift && key === 's') {
           event.preventDefault();
           this.infoModal.hide();
-          this.saveModal.hide();
-          this.editor.focus();
-        } else {
-          this.exitFullscreenIfNeeded();
+          this.showSaveModal();
+          return;
         }
-      }
+
+        // Fullscreen toggle (Cmd+Shift+F)
+        if (isCmd && isShift && key === 'f') {
+          event.preventDefault();
+          this.toggleFullscreen();
+          return;
+        }
+
+        // Handle ESC key for overlays
+        if (event.key === 'Escape') {
+          const isInfoOpen = !this.infoModal.isHidden();
+          const isSaveOpen = !this.saveModal.isHidden();
+
+          if (isInfoOpen || isSaveOpen) {
+            event.preventDefault();
+            this.infoModal.hide();
+            this.saveModal.hide();
+            this.editor.focus();
+          } else {
+            this.exitFullscreenIfNeeded();
+          }
+        }
       },
       { capture: true },
     );

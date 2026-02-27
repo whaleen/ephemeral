@@ -25,7 +25,10 @@ export class SaveModal {
     cancelBtn?.addEventListener('click', () => this.hide());
   }
 
-  public show(onSave: (extension: '.md' | '.txt', baseName: string) => void, initialName = 'ephemeral') {
+  public show(
+    onSave: (extension: '.md' | '.txt', baseName: string) => void,
+    initialName = 'ephemeral',
+  ) {
     this.onSaveCallback = onSave;
     this.fileNameInput.value = initialName;
     this.saveModal.classList.remove('hidden');
