@@ -1,96 +1,43 @@
-# ephemeral-text
+# Ephemeral
 
-A minimalist, ephemeral text editor built with Tauri. It intentionally never auto-saves and never prompts you to save on close. Your text only persists when you explicitly export it.
+Ephemeral is a minimalist text editor built with Tauri. It intentionally never auto-saves and never prompts on close. Text persists only when you explicitly export it.
 
 Legacy Electron snapshot:
 - https://github.com/whaleen/ephemeral-text/tree/legacy-electron-snapshot
 
-## Core Philosophy
+## Philosophy
 
-- No auto-saving
-- No save prompts on close/quit
+- No auto-save
+- No save prompts
 - Manual export only
-- Non-destructive exports (auto-incremented filenames)
-- Zero configuration to start writing
+- Non-destructive exports (auto-incremented names)
 
 ## Features
 
-- Dark/light theme toggle
-- Rich Markdown editor with live formatting (TipTap)
-- Rich keyboard shortcuts for formatting
-- Export to `.txt` or `.md`
+- Markdown editing with rich formatting
+- Export to `.md` or `.txt`
+- Custom filename on export
 - Configurable export directory
-- Non-destructive file exports
-- Last export display with quick reveal in Finder
-- Custom title bar controls (minimize/maximize/close)
-- Harper grammar checks with inline suggestions
+- Last export quick-reveal in Finder
+- System theme support
+
+## Usage
+
+1. Open the app and start writing.
+2. Press `Cmd/Ctrl + S` to export.
+3. Enter a filename, then choose `Markdown` or `Text`.
+4. Use the export directory control in the footer to change destination.
 
 ## Keyboard Shortcuts
 
-- Save: `Cmd/Ctrl + S`
+- Save / Export: `Cmd/Ctrl + S`
+- Info Pane: `Cmd/Ctrl + I`
+- Close/Quit: `Cmd/Ctrl + W` or `Cmd/Ctrl + Q`
+- Fullscreen: `Cmd/Ctrl + Shift + F`
 - Bold: `Cmd/Ctrl + B`
-- Italic: `Cmd/Ctrl + I`
 - Headings: `Cmd/Ctrl + 1-6`
-- Links: `Cmd/Ctrl + K`
-- Code Block: `Cmd/Ctrl + Shift + C`
-- Blockquote: `Cmd/Ctrl + Shift + Q`
-- Strikethrough: `Cmd/Ctrl + Shift + S`
-- List: `Cmd/Ctrl + Shift + L`
-- Ordered List: `Cmd/Ctrl + Shift + O`
-- Task List: `Cmd/Ctrl + Shift + T`
-- Horizontal Rule: `Cmd/Ctrl + Shift + H`
+- Link: `Cmd/Ctrl + K`
 - Image: `Cmd/Ctrl + Shift + I`
 - Table: `Cmd/Ctrl + Shift + X`
 
-## Development
-
-### Prerequisites
-
-- Node.js (LTS)
-- Bun
-- Rust toolchain (for Tauri)
-
-### Install
-
-```bash
-bun install
-```
-
-### Run (Desktop)
-
-```bash
-bun run tauri dev
-```
-
-### Run (Web only)
-
-```bash
-bun run dev
-```
-
-### Build (Desktop)
-
-```bash
-bun run tauri build
-```
-
-## Bun Notes
-
-- This project uses Bun for JS deps and scripts.
-
-## Notes
-
-- Export directory selection uses a native folder picker.
-
-## Project Structure
-
-```
-.
-├── index.html
-├── src/
-│   ├── main.ts
-│   ├── components/
-│   └── services/
-└── src-tauri/
-    └── src/
-```
+For development setup, build, and release workflow, see `DEVELOPER.md`.
