@@ -5,6 +5,11 @@ Ephemeral is a minimalist text editor built with Tauri. It intentionally never a
 Legacy Electron snapshot:
 - https://github.com/whaleen/ephemeral-text/tree/legacy-electron-snapshot
 
+## Screenshots
+
+![Ephemeral editor](./ephemeral.png)
+![Ephemeral info pane](./ephemeral-info.png)
+
 ## Philosophy
 
 - No auto-save
