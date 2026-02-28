@@ -1,9 +1,21 @@
 # Ephemeral
 
-Ephemeral is a minimalist text editor built with Tauri. It intentionally never auto-saves and never prompts on close. Text persists only when you explicitly export it.
+Ephemeral is a minimalist writing tool built with Tauri. It intentionally never auto-saves and never prompts on close. Text persists only when you explicitly export it.
 
-Legacy Electron snapshot:
-- https://github.com/whaleen/ephemeral-text/tree/legacy-electron-snapshot
+## Installation
+
+### Download
+Download the latest version from [GitHub Releases](https://github.com/whaleen/ephemeral/releases/latest).
+
+### Build from source
+Requires [Bun](https://bun.sh/) and the [Rust toolchain](https://www.rust-lang.org/tools/install).
+
+```bash
+bun install
+bun run tauri build
+```
+
+The app bundle will be generated in `src-tauri/target/release/bundle/`.
 
 ## Screenshots
 
@@ -19,7 +31,7 @@ Legacy Electron snapshot:
 
 ## Features
 
-- Markdown editing with rich formatting
+- Markdown writing with rich formatting
 - Export to `.md` or `.txt`
 - Custom filename on export
 - Configurable export directory
@@ -47,4 +59,4 @@ Legacy Electron snapshot:
 - Image: `Cmd/Ctrl + Shift + I`
 - Table: `Cmd/Ctrl + Shift + X`
 
-For development setup, build, and release workflow, see `DEVELOPER.md`.
+For development setup and release workflow details, see `DEVELOPER.md`.
