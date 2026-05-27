@@ -1,24 +1,8 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
-/* Custom drag region styles */
-.drag-region {
-  -webkit-app-region: drag;
-}
 
-.no-drag {
-  -webkit-app-region: no-drag;
-}
-
-.title-input-wrap {
-  min-width: 0;
-}
-
-.title-input {
-  width: min(260px, 55vw);
-  max-width: 100%;
-}
-
+/* ── Footer ────────────────────────────────────────── */
 .footer-mono {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 10px;
@@ -35,10 +19,6 @@
 
 .footer-icon {
   stroke-width: 1;
-}
-
-.prompt-input::placeholder {
-  color: rgb(148 163 184);
 }
 
 @media (max-width: 520px) {
@@ -62,26 +42,7 @@
   }
 }
 
-/* Flash effect for markdown editor */
-.flash {
-  background-color: rgba(59, 130, 246, 0.1) !important;
-  transition: background-color 0.15s ease;
-}
-
-/* TipTap editor styles */
-.prose-editor {
-  height: 100%;
-  padding: 64px min(80px, 12vw);
-  font-size: 16px;
-  line-height: 1.75;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  outline: none;
-  white-space: pre-wrap;
-  word-break: break-word;
-  color: rgb(24 24 27);
-  caret-color: rgb(59 130 246);
-}
-
+/* ── Raw source textarea (Cmd+M toggle) ───────────── */
 .markdown-source {
   width: 100%;
   height: 100%;
@@ -95,11 +56,7 @@
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   color: rgb(24 24 27);
   caret-color: rgb(59 130 246);
-}
-
-.dark .prose-editor {
-  color: rgb(228 228 231);
-  caret-color: rgb(96 165 250);
+  box-sizing: border-box;
 }
 
 .dark .markdown-source {
@@ -107,228 +64,152 @@
   caret-color: rgb(96 165 250);
 }
 
-.prose-editor h1,
-.prose-editor h2,
-.prose-editor h3,
-.prose-editor h4,
-.prose-editor h5,
-.prose-editor h6 {
-  font-family: inherit;
-  font-weight: 800;
-  line-height: 1.25;
-  margin-top: 2em;
-  margin-bottom: 0.75em;
-  color: rgb(9 9 11);
-  letter-spacing: -0.02em;
+/* ── ink-mde overrides ─────────────────────────────── */
+
+/*
+ * Override ink-mde's CSS variables. We do this on .ink (the root element)
+ * for light mode, and .dark .ink for dark mode. Using !important ensures
+ * our values win over ink-mde's injected <style> block.
+ */
+.ink {
+  height: 100% !important;
+
+  --ink-internal-font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  --ink-internal-code-font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  --ink-internal-editor-font-size: 15px !important;
+  --ink-internal-editor-line-height: 1.75 !important;
+  --ink-internal-border-radius: 0.5rem !important;
+  --ink-internal-block-padding: 0.75rem !important;
+  --ink-internal-inline-padding: 0.2rem !important;
+
+  /* Light colours */
+  --ink-internal-color: rgb(24 24 27) !important;
+  --ink-internal-block-background-color: rgb(244 244 245) !important;
+  --ink-internal-block-background-color-on-hover: rgb(228 228 231) !important;
+
+  --ink-internal-syntax-heading-color: rgb(9 9 11) !important;
+  --ink-internal-syntax-heading-font-weight: 800 !important;
+  --ink-internal-syntax-strong-color: rgb(9 9 11) !important;
+  --ink-internal-syntax-strong-font-weight: 700 !important;
+  --ink-internal-syntax-emphasis-color: inherit !important;
+  --ink-internal-syntax-emphasis-font-style: italic !important;
+  --ink-internal-syntax-link-color: rgb(59 130 246) !important;
+  --ink-internal-syntax-url-color: rgb(59 130 246) !important;
+  --ink-internal-syntax-meta-color: rgb(161 161 170) !important;
+  --ink-internal-syntax-punctuation-color: rgb(161 161 170) !important;
+  --ink-internal-syntax-code-color: rgb(24 24 27) !important;
+  --ink-internal-syntax-code-font-family: var(--ink-internal-font-family) !important;
+  --ink-internal-syntax-strikethrough-color: rgb(113 113 122) !important;
+  --ink-internal-syntax-strikethrough-text-decoration: line-through !important;
+  --ink-internal-syntax-atom-color: rgb(59 130 246) !important;
+  --ink-internal-syntax-keyword-color: rgb(139 92 246) !important;
+  --ink-internal-syntax-string-color: rgb(34 197 94) !important;
+  --ink-internal-syntax-comment-color: rgb(161 161 170) !important;
+  --ink-internal-syntax-comment-font-style: italic !important;
 }
 
-.dark .prose-editor h1,
-.dark .prose-editor h2,
-.dark .prose-editor h3,
-.dark .prose-editor h4,
-.dark .prose-editor h5,
-.dark .prose-editor h6 {
-  color: rgb(250 250 250);
+.dark .ink {
+  --ink-internal-color: rgb(228 228 231) !important;
+  --ink-internal-block-background-color: rgb(24 24 27) !important;
+  --ink-internal-block-background-color-on-hover: rgb(39 39 42) !important;
+
+  --ink-internal-syntax-heading-color: rgb(250 250 250) !important;
+  --ink-internal-syntax-strong-color: rgb(250 250 250) !important;
+  --ink-internal-syntax-link-color: rgb(96 165 250) !important;
+  --ink-internal-syntax-url-color: rgb(96 165 250) !important;
+  --ink-internal-syntax-meta-color: rgb(82 82 91) !important;
+  --ink-internal-syntax-punctuation-color: rgb(82 82 91) !important;
+  --ink-internal-syntax-code-color: rgb(212 212 216) !important;
+  --ink-internal-syntax-strikethrough-color: rgb(113 113 122) !important;
+  --ink-internal-syntax-comment-color: rgb(82 82 91) !important;
 }
 
-.prose-editor h1 { font-size: 2.25rem; }
-.prose-editor h2 { font-size: 1.875rem; }
-.prose-editor h3 { font-size: 1.5rem; }
-.prose-editor h4 { font-size: 1.25rem; }
-.prose-editor h5 { font-size: 1.125rem; }
-.prose-editor h6 { font-size: 1rem; }
-
-.prose-editor p {
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
+/* Remove ink-mde's default border/background */
+.ink-mde {
+  border: none !important;
+  background: transparent !important;
 }
 
-.prose-editor ul,
-.prose-editor ol {
-  padding-left: 1.75rem;
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
+/* Scrollable editor area: top/bottom padding for writing space */
+.ink-mde .ink-mde-editor {
+  padding: 64px 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
-.prose-editor ul {
-  list-style-type: disc;
+/* Centered column: horizontal padding lives here */
+.ink-mde .cm-content {
+  padding: 0 min(80px, 12vw) !important;
+  box-sizing: border-box !important;
+  max-width: 860px !important;
+  margin: 0 auto !important;
 }
 
-.prose-editor ol {
-  list-style-type: decimal;
+.ink-mde .cm-line {
+  padding: 0 !important;
 }
 
-.prose-editor li {
-  margin: 0.5rem 0;
+/* Caret */
+.ink-mde .cm-editor {
+  caret-color: rgb(59 130 246) !important;
 }
 
-.prose-editor a {
-  color: rgb(59 130 246);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
+.dark .ink-mde .cm-editor {
+  caret-color: rgb(96 165 250) !important;
 }
 
-.dark .prose-editor a {
-  color: rgb(96 165 250);
+.ink-mde .cm-cursorLayer {
+  z-index: 10 !important;
 }
 
-.prose-editor blockquote {
-  border-left: 4px solid rgb(228 228 231);
-  margin: 2em 0;
-  padding-left: 1.5rem;
-  font-style: italic;
-  color: rgb(113 113 122);
+.ink-mde .cm-cursor,
+.ink-mde .cm-editor.cm-focused .cm-cursor {
+  border-left: 2px solid rgb(59 130 246) !important;
+  margin-left: -1px !important;
+  visibility: visible !important;
 }
 
-.dark .prose-editor blockquote {
-  border-left-color: rgb(39 39 42);
-  color: rgb(161 161 170);
+.dark .ink-mde .cm-cursor,
+.dark .ink-mde .cm-editor.cm-focused .cm-cursor {
+  border-left-color: rgb(96 165 250) !important;
 }
 
-.prose-editor pre {
-  background: rgb(244 244 245);
-  color: rgb(24 24 27);
-  padding: 1.5rem;
-  border-radius: 1rem;
-  overflow: auto;
-  margin: 2em 0;
-  border: 1px solid rgb(228 228 231);
+/* Placeholder */
+.ink-mde .cm-placeholder {
+  color: rgb(107 114 128) !important;
+  font-style: normal !important;
 }
 
-.dark .prose-editor pre {
-  background: rgb(9 9 11);
-  color: rgb(212 212 216);
-  border-color: rgb(24 24 27);
+.dark .ink-mde .cm-placeholder {
+  color: rgb(156 163 175) !important;
 }
 
-.prose-editor code {
-  background: rgb(244 244 245);
-  padding: 0.2rem 0.4rem;
-  border-radius: 0.5rem;
-  font-size: 0.85em;
-  border: 1px solid rgb(228 228 231);
-}
-
-.dark .prose-editor code {
-  background: rgb(24 24 27);
-  border-color: rgb(39 39 42);
-}
-
-.prose-editor hr {
-  border: none;
-  border-top: 2px solid rgb(244 244 245);
-  margin: 3em 0;
-}
-
-.dark .prose-editor hr {
-  border-top-color: rgb(24 24 27);
-}
-
-.prose-editor table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 2em 0;
-}
-
-.prose-editor th,
-.prose-editor td {
-  border: 1px solid rgb(228 228 231);
-  padding: 1rem;
-  text-align: left;
-}
-
-.dark .prose-editor th,
-.dark .prose-editor td {
-  border-color: rgb(39 39 42);
-}
-
-.prose-editor .task-list-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  list-style: none;
-  margin: 0.75rem 0;
-}
-
-.prose-editor ul[data-type="taskList"] {
-  list-style: none;
-  padding-left: 0.25rem;
-}
-
-.prose-editor .task-list-item > label {
-  display: inline-flex;
-  align-items: center;
-  margin: 0;
-  padding-top: 0.45rem;
-  flex-shrink: 0;
-}
-
-.prose-editor .task-list-item > span {
-  flex: 1;
-  min-width: 0;
-}
-
-.prose-editor .task-list-item input[type="checkbox"] {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgb(212 212 216);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: transparent;
-}
-
-.dark .prose-editor .task-list-item input[type="checkbox"] {
-  border-color: rgb(63 63 70);
-}
-
-.prose-editor .task-list-item input[type="checkbox"]:checked {
-  background-color: rgb(59 130 246);
-  border-color: rgb(59 130 246);
-}
-
-.prose-editor .task-list-item input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 5px;
-  height: 9px;
-  border: solid white;
-  border-width: 0 2.5px 2.5px 0;
-  transform: rotate(45deg);
-}
-
-.dark .prose-editor .task-list-item input[type="checkbox"]:checked {
-  background-color: rgb(96 165 250);
-  border-color: rgb(96 165 250);
-}
-
-
-.prose-editor .is-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: rgb(107 114 128);
-  pointer-events: none;
-  height: 0;
-}
-
-.dark .prose-editor .is-empty:first-child::before {
-  color: rgb(156 163 175);
-}
-
-/* Harper grammar error styling */
-.harper-error {
-  text-decoration: underline wavy #ef4444 !important;
-  text-decoration-skip-ink: none !important;
+/* Lint (Harper) — warning underline */
+.ink-mde .cm-lintRange-warning {
+  text-decoration: underline wavy rgb(234 179 8) !important;
   text-underline-offset: 2px !important;
-  cursor: pointer !important;
-  background-color: rgba(239, 68, 68, 0.1) !important;
 }
 
-.harper-error:hover {
-  background-color: rgba(239, 68, 68, 0.2) !important;
+/* Selected text */
+.ink-mde .cm-selectionBackground,
+.ink-mde.cm-focused .cm-selectionBackground {
+  background-color: rgba(59, 130, 246, 0.2) !important;
 }
+
+.dark .ink-mde .cm-selectionBackground,
+.dark .ink-mde.cm-focused .cm-selectionBackground {
+  background-color: rgba(96, 165, 250, 0.2) !important;
+}
+
+/* Focused editor outline — remove default */
+.ink-mde .cm-editor.cm-focused {
+  outline: none !important;
+}
+
+/* Heading line sizing */
+.ink-mde .cm-line.cm-heading-1 { font-size: 2rem; font-weight: 800; line-height: 1.25; }
+.ink-mde .cm-line.cm-heading-2 { font-size: 1.6rem; font-weight: 800; line-height: 1.25; }
+.ink-mde .cm-line.cm-heading-3 { font-size: 1.35rem; font-weight: 700; line-height: 1.25; }
+.ink-mde .cm-line.cm-heading-4 { font-size: 1.15rem; font-weight: 700; }
+.ink-mde .cm-line.cm-heading-5 { font-size: 1rem; font-weight: 700; }
+.ink-mde .cm-line.cm-heading-6 { font-size: 0.9rem; font-weight: 700; }

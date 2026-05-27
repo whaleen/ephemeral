@@ -30,3 +30,13 @@ src-tauri/.tauri
 *.njsproj
 *.sln
 *.sw?
+
+# Agent dirs
+.agents/
+.claude/
+.kiro/
+.vite-hooks/
+skills-lock.json
+CLAUDE.md
+GEMINI.md
+.memory/

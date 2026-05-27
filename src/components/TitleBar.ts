@@ -8,17 +8,32 @@ export class TitleBar {
   }
 
   private initializeControls() {
-    const minimizeBtn = document.getElementById('minimize-btn');
-    const maximizeBtn = document.getElementById('maximize-btn');
-    const closeBtn = document.getElementById('close-btn');
+    const titlebar = document.getElementById('titlebar');
 
-    minimizeBtn?.addEventListener('click', () => this.minimize());
-    maximizeBtn?.addEventListener('click', () => this.toggleMaximize());
-    closeBtn?.addEventListener('click', () => this.close());
+    // titleBarStyle: Overlay still needs a web drag region. Buttons in the
+    // title bar remain normal controls because interactive targets are ignored.
+    titlebar?.addEventListener('mousedown', async (event) => {
+      if (event.button !== 0) return;
+      if (event.detail > 1) return;
+      if (this.isInteractiveTarget(event.target)) return;
+
+      try {
+        await this.window.startDragging();
+      } catch (error) {
+        console.error('Failed to start window drag:', error);
+      }
+    });
+
+    titlebar?.addEventListener('dblclick', (event) => {
+      if (this.isInteractiveTarget(event.target)) return;
+      this.toggleMaximize();
+    });
   }
 
-  private async minimize() {
-    await this.window.minimize();
+  private isInteractiveTarget(target: EventTarget | null) {
+    return (
+      target instanceof Element && Boolean(target.closest('button, a, input, textarea, select'))
+    );
   }
 
   private async toggleMaximize() {
@@ -28,9 +43,5 @@ export class TitleBar {
     } else {
       await this.window.maximize();
     }
-  }
-
-  private async close() {
-    await this.window.close();
   }
 }
