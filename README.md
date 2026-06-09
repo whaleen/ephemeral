@@ -2,6 +2,8 @@
 
 Ephemeral is a minimalist writing tool built with Tauri. It intentionally never auto-saves and never prompts on close. Text persists only when you explicitly export it.
 
+This may seem silly, but I assure you it is not. I need a text editor that will open/close for me without asking me any questions or trying to do anything other than let me write. I want it to just nuke everything when I close. That is all for now. I will be making it allow for optionally "turning on" various features when I have time. Or not.. It does what I needed it to do.
+
 ## Installation
 
 ### Download
