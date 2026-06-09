@@ -1,6 +1,6 @@
 [package]
 name = "ephemeral-text"
-version = "0.1.0"
+version = "0.1.1"
 description = "Ephemeral Text App"
 authors = ["whaleen"]
 edition = "2021"
