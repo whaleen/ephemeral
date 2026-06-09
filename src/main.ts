@@ -3,6 +3,7 @@ import { MarkdownEditor } from './components/MarkdownEditor';
 import { ThemeManager } from './components/ThemeManager';
 import { InfoModal } from './components/InfoModal';
 import { SaveModal } from './components/SaveModal';
+import { UpdateChecker } from './components/UpdateChecker';
 import { FileExportService } from './services/FileExportService';
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
@@ -34,6 +35,7 @@ class EphemeralTextApp {
     this.infoModal = new InfoModal();
     this.saveModal = new SaveModal();
     this.fileExportService = new FileExportService();
+    new UpdateChecker();
 
     this.initializeKeyboardShortcuts();
     this.initializeExportButtons();
