@@ -36,6 +36,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
+      # tauri-action invokes `pnpm tauri build` based on the packageManager
+      # field; setup-vp manages pnpm internally but doesn't expose it on PATH
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
