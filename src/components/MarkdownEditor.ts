@@ -133,7 +133,7 @@ export class MarkdownEditor {
     this.container = el;
     this.onChange = onChange;
     this.promptModal = new PromptModal();
-    this.init();
+    void this.init();
   }
 
   private async init() {
@@ -188,7 +188,7 @@ export class MarkdownEditor {
           {
             key: 'Mod-k',
             run: (v) => {
-              this.insertLink(v);
+              void this.insertLink(v);
               return true;
             },
           },

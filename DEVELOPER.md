@@ -4,15 +4,14 @@ This file contains setup, development, build, and release notes for Ephemeral.
 
 ## Prerequisites
 
-- Node.js (LTS)
-- Bun
+- [Vite+](https://viteplus.dev/) (`vp` CLI — manages Node.js and the package manager)
 - Rust toolchain (required for Tauri desktop builds)
 - macOS tooling for app bundling (if building Mac artifacts)
 
 ## Install
 
 ```bash
-bun install
+vp install
 ```
 
 ## Local Development
@@ -20,13 +19,13 @@ bun install
 Desktop app (Tauri):
 
 ```bash
-bun run tauri dev
+vp exec tauri dev
 ```
 
 Web-only frontend:
 
 ```bash
-bun run dev
+vp dev
 ```
 
 ## Build
@@ -34,21 +33,27 @@ bun run dev
 Frontend build:
 
 ```bash
-npm run build
+vp run build
 ```
 
 Desktop bundle:
 
 ```bash
-bun run tauri build
+vp exec tauri build
 ```
 
 ## Quality Checks
 
+Format, lint, and type check:
+
+```bash
+vp check
+```
+
 TypeScript + Vite production build:
 
 ```bash
-npm run build
+vp run build
 ```
 
 Rust compile check:

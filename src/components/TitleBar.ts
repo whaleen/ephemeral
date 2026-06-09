@@ -26,7 +26,7 @@ export class TitleBar {
 
     titlebar?.addEventListener('dblclick', (event) => {
       if (this.isInteractiveTarget(event.target)) return;
-      this.toggleMaximize();
+      void this.toggleMaximize();
     });
   }
 

@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "identifier": "com.ephemeral-text.tauri",
   "build": {
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "vp run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "bun run build",
+    "beforeBuildCommand": "vp run build",
     "frontendDist": "../dist"
   },
   "app": {

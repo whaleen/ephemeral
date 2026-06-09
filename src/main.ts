@@ -39,7 +39,7 @@ class EphemeralTextApp {
     this.initializeExportButtons();
     this.fileExportService.setupExportDirectoryButton();
     this.initializeExternalLinks();
-    this.initializeFileOpenHandlers();
+    void this.initializeFileOpenHandlers();
   }
 
   private initializeKeyboardShortcuts() {
@@ -113,7 +113,7 @@ class EphemeralTextApp {
         // Fullscreen toggle (Cmd+Shift+F)
         if (isCmd && isShift && key === 'f') {
           event.preventDefault();
-          this.toggleFullscreen();
+          void this.toggleFullscreen();
           return;
         }
 
@@ -128,7 +128,7 @@ class EphemeralTextApp {
             this.saveModal.hide();
             this.editor.focus();
           } else {
-            this.exitFullscreenIfNeeded();
+            void this.exitFullscreenIfNeeded();
           }
         }
       },
@@ -321,7 +321,7 @@ class EphemeralTextApp {
     lastExportDot.classList.toggle('bg-green-500', !this.isDirty);
     lastExportEl.textContent = `${this.isDirty ? 'Unsaved' : 'File'}: ${truncatePath(this.currentFilePath)}`;
     lastExportContainer.onclick = () => {
-      this.fileExportService.showItemInFolder(this.currentFilePath!);
+      void this.fileExportService.showItemInFolder(this.currentFilePath!);
     };
   }
 
@@ -352,19 +352,19 @@ class EphemeralTextApp {
     const downloadTxtBtn = document.getElementById('download-txt');
 
     downloadMdBtn?.addEventListener('click', () => {
-      this.exportFile('.md');
+      void this.exportFile('.md');
       this.editor.focus();
     });
 
     downloadTxtBtn?.addEventListener('click', () => {
-      this.exportFile('.txt');
+      void this.exportFile('.txt');
       this.editor.focus();
     });
   }
 
   private showSaveModal() {
     this.saveModal.show((extension, baseName) => {
-      this.exportFile(extension, baseName);
+      void this.exportFile(extension, baseName);
       this.editor.focus();
     }, this.defaultSaveName());
   }
@@ -404,7 +404,7 @@ class EphemeralTextApp {
       event.preventDefault();
       const href = link.getAttribute('href');
       if (href) {
-        openUrl(href);
+        void openUrl(href);
       }
     });
   }

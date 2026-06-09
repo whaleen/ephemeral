@@ -9,20 +9,20 @@ Ephemeral is a minimalist desktop writing tool built with Tauri v2. It intention
 - **Runtime**: Tauri v2 (Rust backend, Vite/WebView frontend)
 - **Frontend**: TypeScript (vanilla, no framework), Tiptap v2 (rich text/markdown editor), Tailwind CSS v4
 - **Rust backend**: file I/O, export directory state, window geometry persistence
-- **Package manager**: Bun
-- **Bundler**: Vite
-- **Linting/formatting**: ESLint + Prettier
+- **Toolchain**: Vite+ (`vp` CLI) — wraps Vite 8 (Rolldown), Oxlint, Oxfmt, and package management (pnpm under the hood)
+- **Linting/formatting**: Oxlint + Oxfmt, configured in the `lint`/`fmt` blocks of `vite.config.ts`
 - **Deployment**: GitHub Releases (macOS `.app` bundle)
 
 ## Running Locally
 
 ```bash
-bun install
-bun run tauri dev       # desktop app with hot reload
-bun run dev             # web-only frontend (no Tauri APIs available)
-npm run build           # type check + frontend build
+vp install
+vp exec tauri dev       # desktop app with hot reload
+vp dev                  # web-only frontend (no Tauri APIs available)
+vp run build            # type check + frontend build
+vp check                # format + lint + type check (use --fix to auto-fix)
 cd src-tauri && cargo check  # Rust compile check
-bun run tauri build     # release bundle → src-tauri/target/release/bundle/
+vp exec tauri build     # release bundle → src-tauri/target/release/bundle/
 ```
 
 ## Key Files & Directories
@@ -51,7 +51,7 @@ index.html                    — single-page shell; all UI injected into DOM
 - Window geometry persisted to Tauri's app config dir as `window-geometry.json`, restored on next open.
 - `select_export_directory` in `lib.rs` doesn't open a picker — it just returns `~/Documents` as the default. The actual folder picker is triggered via the Tauri dialog plugin from `FileExportService`.
 - `harper.js` provides inline grammar checking via a custom context menu component.
-
+- A pre-commit hook (installed by `vp config` via the `prepare` script) runs `vp check --fix` on staged files — see the `staged` block in `vite.config.ts`.
 
 ## Spec
 

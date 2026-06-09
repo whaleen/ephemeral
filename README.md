@@ -5,14 +5,16 @@ Ephemeral is a minimalist writing tool built with Tauri. It intentionally never 
 ## Installation
 
 ### Download
+
 Download the latest version from [GitHub Releases](https://github.com/whaleen/ephemeral/releases/latest).
 
 ### Build from source
-Requires [Bun](https://bun.sh/) and the [Rust toolchain](https://www.rust-lang.org/tools/install).
+
+Requires [Vite+](https://viteplus.dev/) and the [Rust toolchain](https://www.rust-lang.org/tools/install).
 
 ```bash
-bun install
-bun run tauri build
+vp install
+vp exec tauri build
 ```
 
 The app bundle will be generated in `src-tauri/target/release/bundle/`.

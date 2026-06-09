@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @config "../tailwind.config.js";
-
 
 /* ── Footer ────────────────────────────────────────── */
 .footer-mono {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.02em;
 }
@@ -53,7 +53,9 @@
   padding: 64px min(80px, 12vw);
   font-size: 15px;
   line-height: 1.75;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   color: rgb(24 24 27);
   caret-color: rgb(59 130 246);
   box-sizing: border-box;
@@ -74,8 +76,12 @@
 .ink {
   height: 100% !important;
 
-  --ink-internal-font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-  --ink-internal-code-font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  --ink-internal-font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace !important;
+  --ink-internal-code-font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace !important;
   --ink-internal-editor-font-size: 15px !important;
   --ink-internal-editor-line-height: 1.75 !important;
   --ink-internal-border-radius: 0.5rem !important;
@@ -207,9 +213,30 @@
 }
 
 /* Heading line sizing */
-.ink-mde .cm-line.cm-heading-1 { font-size: 2rem; font-weight: 800; line-height: 1.25; }
-.ink-mde .cm-line.cm-heading-2 { font-size: 1.6rem; font-weight: 800; line-height: 1.25; }
-.ink-mde .cm-line.cm-heading-3 { font-size: 1.35rem; font-weight: 700; line-height: 1.25; }
-.ink-mde .cm-line.cm-heading-4 { font-size: 1.15rem; font-weight: 700; }
-.ink-mde .cm-line.cm-heading-5 { font-size: 1rem; font-weight: 700; }
-.ink-mde .cm-line.cm-heading-6 { font-size: 0.9rem; font-weight: 700; }
+.ink-mde .cm-line.cm-heading-1 {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+.ink-mde .cm-line.cm-heading-2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+.ink-mde .cm-line.cm-heading-3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.ink-mde .cm-line.cm-heading-4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.ink-mde .cm-line.cm-heading-5 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ink-mde .cm-line.cm-heading-6 {
+  font-size: 0.9rem;
+  font-weight: 700;
+}

@@ -4,12 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "build": "tsc && vp build",
+    "preview": "vp preview",
     "tauri": "tauri",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\""
+    "lint": "vp lint",
+    "format": "vp fmt \"src/**/*.{ts,tsx}\"",
+    "prepare": "vp config"
   },
   "dependencies": {
     "@codemirror/lint": "^6.9.6",
@@ -24,19 +25,15 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.1.11",
     "@tauri-apps/cli": "^2",
     "@types/node": "^24.0.14",
     "autoprefixer": "^10.4.21",
-    "eslint": "^10.0.2",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
     "postcss": "^8.5.6",
-    "prettier": "^3.8.1",
     "tailwindcss": "^4.1.11",
     "typescript": "~5.6.2",
-    "typescript-eslint": "^8.56.1",
-    "vite": "^6.0.3"
-  }
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "packageManager": "pnpm@11.5.2"
 }

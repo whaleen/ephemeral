@@ -5,10 +5,10 @@ import { truncatePath } from '../lib/utils';
 export class FileExportService {
   private exportDirectory: string = '';
   private lastExportPath: string = '';
-  private fileCheckInterval: NodeJS.Timeout | null = null;
+  private fileCheckInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
-    this.initializeExportDirectory();
+    void this.initializeExportDirectory();
   }
 
   private async initializeExportDirectory() {
@@ -89,7 +89,7 @@ export class FileExportService {
 
       // Add click handler to show in folder
       lastExportContainer.onclick = () => {
-        this.showItemInFolder(filePath);
+        void this.showItemInFolder(filePath);
       };
     }
   }

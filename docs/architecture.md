@@ -8,28 +8,28 @@ Ephemeral is a Tauri v2 desktop app. The frontend is a vanilla TypeScript single
 
 ### Frontend (`src/`)
 
-| Component | Role |
-|-----------|------|
-| `main.ts` | Entry point. Instantiates all components, wires keyboard shortcuts and export buttons. |
-| `MarkdownEditor` | Core editor. Tiptap instance with Markdown serialization, source mode (raw textarea), and grammar checking via harper.js. |
-| `SaveModal` | Export dialog — prompts for filename and format (`.md` / `.txt`), then delegates to `FileExportService`. |
-| `InfoModal` | Help overlay showing keyboard shortcuts. Toggle with Cmd+/. |
-| `TitleBar` | Custom drag region and window controls (frameless window). |
-| `ThemeManager` | Reads system `prefers-color-scheme` and applies light/dark class to document root. |
-| `HarperCorrectionMenu` | Context menu shown when clicking a harper.js grammar error. Displays replacements and applies the chosen one. |
-| `FileExportService` | Calls Tauri `invoke` to get/set export directory and write files. |
-| `PromptModal` | Generic inline input modal used for link and image URL prompts. |
+| Component              | Role                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `main.ts`              | Entry point. Instantiates all components, wires keyboard shortcuts and export buttons.                                    |
+| `MarkdownEditor`       | Core editor. Tiptap instance with Markdown serialization, source mode (raw textarea), and grammar checking via harper.js. |
+| `SaveModal`            | Export dialog — prompts for filename and format (`.md` / `.txt`), then delegates to `FileExportService`.                  |
+| `InfoModal`            | Help overlay showing keyboard shortcuts. Toggle with Cmd+/.                                                               |
+| `TitleBar`             | Custom drag region and window controls (frameless window).                                                                |
+| `ThemeManager`         | Reads system `prefers-color-scheme` and applies light/dark class to document root.                                        |
+| `HarperCorrectionMenu` | Context menu shown when clicking a harper.js grammar error. Displays replacements and applies the chosen one.             |
+| `FileExportService`    | Calls Tauri `invoke` to get/set export directory and write files.                                                         |
+| `PromptModal`          | Generic inline input modal used for link and image URL prompts.                                                           |
 
 ### Rust Backend (`src-tauri/src/lib.rs`)
 
-| Command | Role |
-|---------|------|
-| `save_file` | Writes content to the export directory with auto-incremented filename if needed. |
-| `get_export_directory` | Returns current export dir (defaults to `~/Documents`). |
-| `set_export_directory` | Updates the in-memory export dir (`Mutex<Option<PathBuf>>`). |
+| Command                   | Role                                                                                                             |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `save_file`               | Writes content to the export directory with auto-incremented filename if needed.                                 |
+| `get_export_directory`    | Returns current export dir (defaults to `~/Documents`).                                                          |
+| `set_export_directory`    | Updates the in-memory export dir (`Mutex<Option<PathBuf>>`).                                                     |
 | `select_export_directory` | Returns `~/Documents` as default — actual picker is triggered by the Tauri dialog plugin in `FileExportService`. |
-| `show_item_in_folder` | Reveals exported file in Finder/Explorer. |
-| `quit_app` | Exits the process. |
+| `show_item_in_folder`     | Reveals exported file in Finder/Explorer.                                                                        |
+| `quit_app`                | Exits the process.                                                                                               |
 
 Window geometry (position + size) is persisted to Tauri's app config dir as `window-geometry.json` on every move/resize event, and restored on next launch.
 
