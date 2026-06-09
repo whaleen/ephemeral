@@ -145,9 +145,15 @@ fn create_window_internal(app: &AppHandle) -> Result<(), String> {
     let mut builder = WebviewWindowBuilder::new(app, label, WebviewUrl::App("/".into()))
         .title("Ephemeral")
         .min_inner_size(400.0, 300.0)
-        .decorations(true)
-        .title_bar_style(tauri::TitleBarStyle::Overlay)
-        .hidden_title(true);
+        .decorations(true);
+
+    // Overlay title bar is a macOS-only API; Linux/Windows use plain decorations
+    #[cfg(target_os = "macos")]
+    {
+        builder = builder
+            .title_bar_style(tauri::TitleBarStyle::Overlay)
+            .hidden_title(true);
+    }
 
     if let Some(geometry) = geometry {
         builder = builder.inner_size(geometry.width as f64, geometry.height as f64).position(geometry.x as f64, geometry.y as f64);
