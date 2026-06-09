@@ -6,6 +6,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+# tauri-action needs to create the draft release and upload assets
+permissions:
+  contents: write
+
 jobs:
   release:
     strategy:
