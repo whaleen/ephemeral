@@ -18,11 +18,11 @@ jobs:
         include:
           - platform: 'macos-latest'
             args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest'
+          # Build Intel macOS on an Intel runner. Cross-building this target on
+          # Apple Silicon can compile successfully but fail while bundling DMGs.
+          - platform: 'macos-13'
             args: '--target x86_64-apple-darwin'
           - platform: 'ubuntu-22.04'
-            args: ''
-          - platform: 'windows-latest'
             args: ''
 
     runs-on: ${{ matrix.platform }}
